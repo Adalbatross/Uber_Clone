@@ -1,25 +1,39 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
+import { UserDataContext } from "../context/UserContext.jsx";
 const UserSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('')
   const [firstname, setFirstname] = useState('')
   const [lastname, setLastname] = useState('')
   const [password, setPassword] = useState('')
-  const [userData, setUserData] = useState({})
+  // const [userData, setUserData] = useState({})
   const navigate = useNavigate()
-  const submitHandler = (e)=>{
+
+  const { user, setUser } = React.useContext(UserDataContext);
+  const submitHandler = async (e)=>{
     e.preventDefault();
-    setUserData({
+    const newUser = {
       fullname: {
         firstname: firstname,
         lastname: lastname,
       },
       email: email,
       password: password,
-    });
-    console.log(userData);
+    };
+    console.log(user);
+    
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser)
+    
+    if (response.status === 201) {
+      const data = response.data;
+      console.log(data);
+      setUser(data.user)
+      localStorage.setItem("token", data.token);
+      navigate('/home')
+    }
+
     setFirstname('');  
     setLastname('');  
     setEmail('');
@@ -28,73 +42,73 @@ const UserSignup = () => {
   }
 
   return (
-    <div className='p-7 h-screen flex flex-col justify-between'>
+    <div className="p-7 h-screen flex flex-col justify-between">
       <div>
         <img
-          onClick={()=>{
-            navigate('/')
+          onClick={() => {
+            navigate("/");
           }}
-          className='w-16 mb-8.5'
-          src='https://imgs.search.brave.com/-mMYzi4IoKkQJDvuZ0lR4OCPodpulKpPEhzrQFr4ark/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/dW5kZXJjb25zaWRl/cmF0aW9uLmNvbS9i/cmFuZG5ldy9hcmNo/aXZlcy91YmVyXzIw/MThfbG9nby5wbmc'
+          className="w-16 mb-8.5"
+          src="https://imgs.search.brave.com/-mMYzi4IoKkQJDvuZ0lR4OCPodpulKpPEhzrQFr4ark/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/dW5kZXJjb25zaWRl/cmF0aW9uLmNvbS9i/cmFuZG5ldy9hcmNo/aXZlcy91YmVyXzIw/MThfbG9nby5wbmc"
           alt="logo"
         />
 
-        <form onSubmit={(e)=>{
-            submitHandler(e)
-        }}>
-        
-          <h3 className='text-lg font-medium mb-2'>What's your name</h3>
-          <div className='flex gap-3.5 mb-6'>
-          <input
-            required
-            value={firstname}
-            onChange={(e)=>{
-                setFirstname(e.target.value)
-            }}
-            className='bg-[#eeee] w-1/2  rounded px-4 py-2  text-base placeholder:text-sm'
-            type="text"
-            placeholder='First name'
-          />
-          <input
-            required
-            value={lastname}
-            onChange={(e)=>{
-                setLastname(e.target.value)
-            }}
-            className='bg-[#eeee]  rounded px-4 py-2 w-1/2 text-base placeholder:text-sm'
-            type="text"
-            placeholder='Last name'
-          />
-
+        <form
+          onSubmit={(e) => {
+            submitHandler(e);
+          }}
+        >
+          <h3 className="text-lg font-medium mb-2">What's your name</h3>
+          <div className="flex gap-3.5 mb-6">
+            <input
+              required
+              value={firstname}
+              onChange={(e) => {
+                setFirstname(e.target.value);
+              }}
+              className="bg-[#eeee] w-1/2  rounded px-4 py-2  text-base placeholder:text-sm"
+              type="text"
+              placeholder="First name"
+            />
+            <input
+              required
+              value={lastname}
+              onChange={(e) => {
+                setLastname(e.target.value);
+              }}
+              className="bg-[#eeee]  rounded px-4 py-2 w-1/2 text-base placeholder:text-sm"
+              type="text"
+              placeholder="Last name"
+            />
           </div>
-          <h3 className='text-lg font-medium mb-2'>What's your email</h3>
+          <h3 className="text-lg font-medium mb-2">What's your email</h3>
           <input
             required
             value={email}
-            onChange={(e)=>{
-                setEmail(e.target.value)
+            onChange={(e) => {
+              setEmail(e.target.value);
             }}
-            className='bg-[#eeee] mb-6 rounded px-4 py-2 w-full text-base placeholder:text-sm'
+            className="bg-[#eeee] mb-6 rounded px-4 py-2 w-full text-base placeholder:text-sm"
             type="email"
-            placeholder='email@example.com'
+            placeholder="email@example.com"
           />
 
-          <h3 className='text-lg font-medium mb-2'>Create Password</h3>
-          <div className='relative mb-6'>
+          <h3 className="text-lg font-medium mb-2">Create Password</h3>
+          <div className="relative mb-6">
             <input
               required
               value={password}
-              onChange={(e)=>{
-                setPassword(e.target.value)
+              onChange={(e) => {
+                setPassword(e.target.value);
               }}
-              className='bg-[#eeee] rounded px-4 py-2 w-full text-base placeholder:text-sm'
+              className="bg-[#eeee] rounded px-4 py-2 w-full text-base placeholder:text-sm"
               type={showPassword ? "text" : "password"}
-              placeholder='password'
+              placeholder="password"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className='absolute right-3 top-1/2 -translate-y-1/2'
+              className="absolute right-3 top-1/2 -translate-y-1/2"
             >
               <img
                 src={
@@ -108,13 +122,13 @@ const UserSignup = () => {
             </button>
           </div>
 
-          <button className='bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 w-full text-lg'>
+          <button className="bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 w-full text-lg">
             Register
           </button>
 
-          <p className='text-center'>
+          <p className="text-center">
             Already have a account?{" "}
-            <Link to='/user-login' className='text-blue-600'>
+            <Link to="/user-login" className="text-blue-600">
               Login Here
             </Link>
           </p>
@@ -122,12 +136,14 @@ const UserSignup = () => {
       </div>
 
       <div className="mt-auto">
-        <p className='text-[10px] leading-tight'>
-            By creating an account, you agree to our Terms of Service and Privacy Policy. You consent to the collection, storage, and use of your information as described in our policies. Please ensure that all information provided is accurate and up-to-date.
+        <p className="text-[10px] mt-6 leading-tight">
+          This site is protected by reCAPTCHA and the{" "}
+          <span className="underline">Google Privacy Policy</span> and{" "}
+          <span className="underline">Terms of Service apply</span>.
         </p>
       </div>
     </div>
-  )
+  );
 }
 
 export default UserSignup
