@@ -8,10 +8,12 @@ const UserProtectWrapper = ({ children }) => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserDataContext);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(user)
+
   useEffect(() => {
     if (!token) {
       navigate("/user-login");
+      console.log(user);
+      
     }
 
     axios
