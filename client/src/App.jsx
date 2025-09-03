@@ -11,6 +11,9 @@ import UserLogout from './pages/UserLogout'
 import CaptainHome from './pages/CaptainHome'
 import CaptainProtectedWrapper from './pages/CaptainProtectedWrapper'
 import CaptainLogut from './pages/CaptainLogut'
+import "@fontsource/poppins"; // Defaults to weight 400
+import "@fontsource/poppins/700.css"; // Example for bold
+
 
 
 const App = () => {
