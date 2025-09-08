@@ -13,6 +13,7 @@ import CaptainProtectedWrapper from './pages/CaptainProtectedWrapper'
 import CaptainLogut from './pages/CaptainLogut'
 import "@fontsource/poppins"; // Defaults to weight 400
 import "@fontsource/poppins/700.css"; // Example for bold
+import Riding from './pages/Riding'
 
 
 
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/captain-login" element={<CaptainLogin />} />
         <Route path="/user-signup" element={<UserSignup />} />
         <Route path="/captain-signup" element={<CaptainSignup />} />
+        <Route path="/riding" element={<Riding />} />
         <Route
           path="/home"
           element={
